@@ -22,7 +22,6 @@ const productNames = {
     "Pre-Workout Energy - Caffeine Boost",
     "Pre-Workout Pump - Nitric Oxide",
     "Pre-Workout Endurance - Beta Alanine",
-    "Pre-Workout Focus - No Caffeine",
   ],
   "post-workout": [
     "Post-Workout Recovery - BCAAs",
@@ -196,16 +195,6 @@ export const products: Product[] = [
     bestseller: false,
     image: getProductImage("pre-workout", 2),
     stock: 28,
-  },
-  {
-    id: "prod-15",
-    name: productNames["pre-workout"][3],
-    description: descriptions["pre-workout"],
-    price: 39.99,
-    category: "pre-workout",
-    bestseller: false,
-    image: getProductImage("pre-workout", 3),
-    stock: 9,
   },
   // Post-workout products
   {
@@ -488,12 +477,11 @@ export const initialOrders: Order[] = [
     state: sampleCustomers[2].state,
     zipCode: sampleCustomers[2].zipCode,
     products: [
-      { product: products[14], quantity: 1 },
-      { product: products[16], quantity: 1 },
+      { product: products[15], quantity: 1 },
     ],
     status: "delivered",
     date: getRandomDate(12),
-    total: 60.98,
+    total: 27.99,
   },
 ];
 

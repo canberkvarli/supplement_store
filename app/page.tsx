@@ -8,11 +8,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, HelpCircle, Truck, ShieldCheck, RotateCcw, Sparkles } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { TrustBadges } from "@/components/home/trust-badges";
 import { HeroSearch } from "@/components/home/hero-search";
 import { BenefitsGrid } from "@/components/home/benefits-grid";
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel";
-import { IngredientQuality } from "@/components/home/ingredient-quality";
 import { ComparisonTable } from "@/components/home/comparison-table";
 import { ReturnPolicy } from "@/components/home/return-policy";
 
@@ -89,20 +87,14 @@ export default function Home() {
           <ProductCarousel products={bestsellers} />
         </section>
 
-        {/* Trust Badges Bar */}
-        <TrustBadges />
-
         {/* Benefits Grid */}
         <BenefitsGrid />
 
-        {/* Testimonials Carousel */}
-        <TestimonialsCarousel />
-
-        {/* Ingredient Quality Showcase */}
-        <IngredientQuality />
-
         {/* Comparison Table */}
         <ComparisonTable />
+
+        {/* Testimonials Carousel */}
+        <TestimonialsCarousel />
 
         {/* Return Policy Highlight */}
         <ReturnPolicy />
