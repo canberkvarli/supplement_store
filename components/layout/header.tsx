@@ -1,19 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ShoppingCart, Moon, Sun, Home, Package, Settings, Pill, Menu, X } from "lucide-react";
 import { useCartStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const itemCount = useCartStore((state) => state.getItemCount());
   const { theme, setTheme } = useTheme();
-  const [mounted] = useState(() => typeof window !== 'undefined');
+  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Set mounted after hydration to avoid hydration mismatch
+  // This is necessary to prevent hydration mismatches with client-only features like theme
+  useEffect(() => {
+    // Using setTimeout to defer state update and avoid cascading renders warning
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const isActive = (path: string) => pathname === path;
 
@@ -66,28 +75,30 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
-          {mounted && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="hidden sm:flex"
-            >
-              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          )}
-          <Link href="/cart">
-            <Button variant="outline" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              {mounted && itemCount > 0 && (
-                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
-                  {itemCount}
-                </span>
-              )}
-            </Button>
-          </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => mounted && setTheme(theme === "dark" ? "light" : "dark")}
+            className="hidden sm:flex"
+            disabled={!mounted}
+          >
+            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="relative"
+            onClick={() => router.push("/cart")}
+          >
+            <ShoppingCart className="h-5 w-5" />
+            {mounted && itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                {itemCount}
+              </span>
+            )}
+          </Button>
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
@@ -149,27 +160,33 @@ export function Header() {
               <Settings className="h-4 w-4" />
               Admin
             </Link>
-            {mounted && (
-              <button
-                onClick={() => {
+            <button
+              onClick={() => {
+                if (mounted) {
                   setTheme(theme === "dark" ? "light" : "dark");
                   setMobileMenuOpen(false);
-                }}
-                className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent w-full"
-              >
-                {theme === "dark" ? (
-                  <>
-                    <Sun className="h-4 w-4" />
-                    Light Mode
-                  </>
-                ) : (
-                  <>
-                    <Moon className="h-4 w-4" />
-                    Dark Mode
-                  </>
-                )}
-              </button>
-            )}
+                }
+              }}
+              disabled={!mounted}
+              className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent w-full disabled:opacity-50"
+            >
+              {mounted && theme === "dark" ? (
+                <>
+                  <Sun className="h-4 w-4" />
+                  Light Mode
+                </>
+              ) : mounted ? (
+                <>
+                  <Moon className="h-4 w-4" />
+                  Dark Mode
+                </>
+              ) : (
+                <>
+                  <Moon className="h-4 w-4" />
+                  Theme
+                </>
+              )}
+            </button>
           </nav>
         </div>
       )}
