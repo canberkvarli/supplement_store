@@ -7,6 +7,7 @@ import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card } from "@/components/ui/card";
 import { Order } from "@/lib/types";
 import { useOrderStore } from "@/lib/store";
 import Link from "next/link";
@@ -174,7 +175,7 @@ export function OrdersTable() {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4 items-end">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -233,7 +234,7 @@ export function OrdersTable() {
         </Alert>
       )}
 
-      <div className="rounded-md border">
+      <div className="hidden md:block rounded-md border-2">
         <Table>
           <TableHeader>
             <TableRow>
@@ -256,7 +257,7 @@ export function OrdersTable() {
               </TableRow>
             ) : (
               paginatedOrders.map((order) => (
-                <TableRow key={order.id}>
+                <TableRow key={order.id} className="border-b-2 hover:bg-muted/50 transition-colors">
                   <TableCell className="font-medium">{order.id}</TableCell>
                   <TableCell>{order.customerName}</TableCell>
                   <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
@@ -299,10 +300,72 @@ export function OrdersTable() {
           </TableBody>
         </Table>
       </div>
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-6">
+        {paginatedOrders.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No orders found
+          </div>
+        ) : (
+          paginatedOrders.map((order) => (
+            <Card key={order.id} className="p-4 border-2 shadow-md hover:shadow-lg transition-shadow">
+              <div className="space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm text-muted-foreground">Order ID</p>
+                    <p className="font-semibold truncate">{order.id}</p>
+                  </div>
+                  <Badge variant={getStatusVariant(order.status)}>
+                    {order.status}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">Customer</p>
+                  <p className="font-semibold">{order.customerName}</p>
+                </div>
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">Date</p>
+                  <p>{new Date(order.date).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">Items</p>
+                  <p>{order.products.length} item{order.products.length !== 1 ? 's' : ''}</p>
+                </div>
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground mb-2">Products</p>
+                  <div className="space-y-2">
+                    {order.products.map((item, idx) => (
+                      <div key={idx} className="text-sm border-b pb-2 last:border-0">
+                        <p className="font-medium">{item.product.name}</p>
+                        <p className="text-muted-foreground">
+                          Qty: {item.quantity} × ${item.product.price.toFixed(2)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <div>
+                    <p className="font-medium text-sm text-muted-foreground">Total</p>
+                    <p className="font-semibold text-lg">${order.total.toFixed(2)}</p>
+                  </div>
+                  <Link href={`/admin/orders/${order.id}`}>
+                    <Button variant="outline" size="sm">
+                      <Eye className="mr-2 h-4 w-4" />
+                      View
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </Card>
+          ))
+        )}
+      </div>
+
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground text-center sm:text-left">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
             {Math.min(currentPage * itemsPerPage, filteredOrders.length)} of{" "}
             {filteredOrders.length} orders

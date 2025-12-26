@@ -18,9 +18,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   }
 
   return (
-    <div className="container mx-auto py-8 max-w-7xl px-4">
+    <div className="container mx-auto py-4 sm:py-8 max-w-7xl px-4">
       <Link href="/admin/orders">
-        <Button variant="ghost" className="mb-6">
+        <Button variant="ghost" className="mb-4 sm:mb-6 w-full sm:w-auto">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Orders
         </Button>

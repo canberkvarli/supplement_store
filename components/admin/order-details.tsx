@@ -41,16 +41,16 @@ export function OrderDetails({ order: initialOrder }: OrderDetailsProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Order {order.id}</CardTitle>
-            <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <CardTitle className="text-xl sm:text-2xl break-all sm:break-normal">Order {order.id}</CardTitle>
+            <Badge variant={getStatusVariant(order.status)} className="self-start sm:self-auto">{order.status}</Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <h3 className="font-semibold mb-2 flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -113,7 +113,7 @@ export function OrderDetails({ order: initialOrder }: OrderDetailsProps) {
         <CardContent>
           <div className="space-y-4">
             {order.products.map((item, index) => (
-              <div key={index} className="flex items-center gap-4 border-b pb-4">
+              <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-b pb-4">
                 <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-muted">
                   <Image
                     src={item.product.image}
@@ -122,13 +122,13 @@ export function OrderDetails({ order: initialOrder }: OrderDetailsProps) {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex-1">
-                  <h4 className="font-semibold">{item.product.name}</h4>
+                <div className="flex-1 min-w-0 w-full sm:w-auto">
+                  <h4 className="font-semibold truncate">{item.product.name}</h4>
                   <p className="text-sm text-muted-foreground">
                     {item.product.category} • Qty: {item.quantity}
                   </p>
                 </div>
-                <div className="text-right">
+                <div className="text-left sm:text-right w-full sm:w-auto">
                   <p className="font-semibold">
                     ${(item.product.price * item.quantity).toFixed(2)}
                   </p>
@@ -136,7 +136,7 @@ export function OrderDetails({ order: initialOrder }: OrderDetailsProps) {
               </div>
             ))}
             <div className="border-t pt-4">
-              <div className="flex justify-between text-lg font-semibold">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-lg font-semibold">
                 <span className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5" />
                   Total
