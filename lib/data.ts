@@ -63,6 +63,7 @@ export const products: Product[] = [
     category: "protein",
     bestseller: true,
     image: getProductImage("protein", 0),
+    stock: 8,
   },
   {
     id: "prod-2",
@@ -72,6 +73,7 @@ export const products: Product[] = [
     category: "protein",
     bestseller: true,
     image: getProductImage("protein", 1),
+    stock: 15,
   },
   {
     id: "prod-3",
@@ -81,6 +83,7 @@ export const products: Product[] = [
     category: "protein",
     bestseller: false,
     image: getProductImage("protein", 2),
+    stock: 25,
   },
   {
     id: "prod-4",
@@ -90,6 +93,7 @@ export const products: Product[] = [
     category: "protein",
     bestseller: true,
     image: getProductImage("protein", 1),
+    stock: 5,
   },
   {
     id: "prod-5",
@@ -99,6 +103,7 @@ export const products: Product[] = [
     category: "protein",
     bestseller: false,
     image: getProductImage("protein", 0),
+    stock: 30,
   },
   // Vitamin products
   {
@@ -109,6 +114,7 @@ export const products: Product[] = [
     category: "vitamins",
     bestseller: true,
     image: getProductImage("vitamins", 0),
+    stock: 12,
   },
   {
     id: "prod-7",
@@ -118,6 +124,7 @@ export const products: Product[] = [
     category: "vitamins",
     bestseller: true,
     image: getProductImage("vitamins", 1),
+    stock: 20,
   },
   {
     id: "prod-8",
@@ -127,6 +134,7 @@ export const products: Product[] = [
     category: "vitamins",
     bestseller: false,
     image: getProductImage("vitamins", 0),
+    stock: 35,
   },
   {
     id: "prod-9",
@@ -136,6 +144,7 @@ export const products: Product[] = [
     category: "vitamins",
     bestseller: false,
     image: getProductImage("vitamins", 1),
+    stock: 7,
   },
   {
     id: "prod-10",
@@ -145,6 +154,7 @@ export const products: Product[] = [
     category: "vitamins",
     bestseller: true,
     image: getProductImage("vitamins", 0),
+    stock: 18,
   },
   {
     id: "prod-11",
@@ -154,6 +164,7 @@ export const products: Product[] = [
     category: "vitamins",
     bestseller: false,
     image: getProductImage("vitamins", 1),
+    stock: 40,
   },
   // Pre-workout products
   {
@@ -164,6 +175,7 @@ export const products: Product[] = [
     category: "pre-workout",
     bestseller: true,
     image: getProductImage("pre-workout", 0),
+    stock: 6,
   },
   {
     id: "prod-13",
@@ -173,6 +185,7 @@ export const products: Product[] = [
     category: "pre-workout",
     bestseller: false,
     image: getProductImage("pre-workout", 1),
+    stock: 22,
   },
   {
     id: "prod-14",
@@ -182,6 +195,7 @@ export const products: Product[] = [
     category: "pre-workout",
     bestseller: false,
     image: getProductImage("pre-workout", 2),
+    stock: 28,
   },
   {
     id: "prod-15",
@@ -191,6 +205,7 @@ export const products: Product[] = [
     category: "pre-workout",
     bestseller: false,
     image: getProductImage("pre-workout", 3),
+    stock: 9,
   },
   // Post-workout products
   {
@@ -201,6 +216,7 @@ export const products: Product[] = [
     category: "post-workout",
     bestseller: true,
     image: getProductImage("post-workout", 0),
+    stock: 14,
   },
   {
     id: "prod-17",
@@ -210,6 +226,7 @@ export const products: Product[] = [
     category: "post-workout",
     bestseller: false,
     image: getProductImage("post-workout", 1),
+    stock: 32,
   },
   {
     id: "prod-18",
@@ -219,6 +236,7 @@ export const products: Product[] = [
     category: "post-workout",
     bestseller: false,
     image: getProductImage("post-workout", 2),
+    stock: 45,
   },
   // Weight management products
   {
@@ -229,6 +247,7 @@ export const products: Product[] = [
     category: "weight-management",
     bestseller: false,
     image: getProductImage("weight-management", 0),
+    stock: 11,
   },
   {
     id: "prod-20",
@@ -238,6 +257,7 @@ export const products: Product[] = [
     category: "weight-management",
     bestseller: false,
     image: getProductImage("weight-management", 1),
+    stock: 26,
   },
   {
     id: "prod-21",
@@ -247,6 +267,7 @@ export const products: Product[] = [
     category: "weight-management",
     bestseller: false,
     image: getProductImage("weight-management", 2),
+    stock: 38,
   },
   // Health & wellness products
   {
@@ -257,6 +278,7 @@ export const products: Product[] = [
     category: "health-wellness",
     bestseller: true,
     image: getProductImage("health-wellness", 0),
+    stock: 4,
   },
   {
     id: "prod-23",
@@ -266,6 +288,7 @@ export const products: Product[] = [
     category: "health-wellness",
     bestseller: false,
     image: getProductImage("health-wellness", 1),
+    stock: 19,
   },
   {
     id: "prod-24",
@@ -275,6 +298,7 @@ export const products: Product[] = [
     category: "health-wellness",
     bestseller: false,
     image: getProductImage("health-wellness", 2),
+    stock: 33,
   },
   {
     id: "prod-25",
@@ -284,6 +308,7 @@ export const products: Product[] = [
     category: "health-wellness",
     bestseller: false,
     image: getProductImage("health-wellness", 3),
+    stock: 16,
   },
 ];
 

@@ -34,7 +34,14 @@ export function ProductCard({ product }: ProductCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {product.bestseller && (
-            <Badge className="absolute top-2 left-2">Bestseller</Badge>
+            <Badge className="absolute top-2 left-2 text-sm md:text-base px-3 py-1.5 font-semibold">
+              Bestseller
+            </Badge>
+          )}
+          {product.stock !== undefined && product.stock < 10 && (
+            <Badge variant="destructive" className="absolute top-2 right-2 text-sm md:text-base px-3 py-1.5 font-semibold">
+              Only {product.stock} left!
+            </Badge>
           )}
         </div>
       </Link>
@@ -48,7 +55,14 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardHeader>
       <CardContent className="flex-1">
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold">${product.price.toFixed(2)}</span>
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold">${product.price.toFixed(2)}</span>
+            {product.stock !== undefined && product.stock < 10 && (
+              <span className="text-xs text-destructive font-medium mt-1">
+                Low stock - {product.stock} remaining
+              </span>
+            )}
+          </div>
           <Badge variant="outline">{product.category}</Badge>
         </div>
       </CardContent>

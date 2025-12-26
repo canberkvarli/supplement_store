@@ -6,6 +6,7 @@ export interface Product {
   category: "protein" | "vitamins" | "pre-workout" | "post-workout" | "weight-management" | "health-wellness";
   bestseller: boolean;
   image: string;
+  stock?: number;
 }
 
 export interface CartItem {
