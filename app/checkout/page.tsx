@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore, useOrderStore } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +30,31 @@ export default function CheckoutPage() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Reset isSubmitting if component unmounts or if user navigates back
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      setIsSubmitting(false);
+    };
+  }, []);
+
+  // Reset isSubmitting if navigation fails or after a reasonable timeout
+  useEffect(() => {
+    if (isSubmitting) {
+      // Fallback: reset after 5 seconds if navigation hasn't completed
+      const fallbackTimeout = setTimeout(() => {
+        setIsSubmitting(false);
+      }, 5000);
+
+      return () => {
+        clearTimeout(fallbackTimeout);
+      };
+    }
+  }, [isSubmitting]);
 
   if (items.length === 0 && !isSubmitting) {
     return (
@@ -126,8 +151,17 @@ export default function CheckoutPage() {
     addOrder(order);
     clearCart();
     // Delay to ensure order is persisted and show loading indicator for at least 1 second
-    setTimeout(() => {
-      router.push(`/admin/orders/${order.id}`);
+    timeoutRef.current = setTimeout(() => {
+      try {
+        router.push(`/admin/orders/${order.id}`);
+        // Reset state after navigation attempt
+        // If navigation succeeds, component will unmount and cleanup will run
+        // If it fails, the fallback timeout in useEffect will reset it
+      } catch (error) {
+        // If navigation fails, reset the submitting state
+        console.error("Navigation failed:", error);
+        setIsSubmitting(false);
+      }
     }, 1000);
   };
 
