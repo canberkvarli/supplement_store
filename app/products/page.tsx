@@ -17,6 +17,8 @@ function ProductsContent() {
   const [showBestsellerOnly, setShowBestsellerOnly] = useState(
     searchParams.get("bestseller") === "true"
   );
+  const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered: Product[] = products;
@@ -40,6 +42,15 @@ function ProductsContent() {
       filtered = filtered.filter((product) => product.bestseller);
     }
 
+    // Price range filter
+    if (minPrice !== null || maxPrice !== null) {
+      filtered = filtered.filter((product) => {
+        const meetsMin = minPrice === null || product.price >= minPrice;
+        const meetsMax = maxPrice === null || product.price <= maxPrice;
+        return meetsMin && meetsMax;
+      });
+    }
+
     // Sort
     const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
@@ -58,7 +69,7 @@ function ProductsContent() {
     });
 
     return sorted;
-  }, [searchQuery, categoryFilter, sortBy, showBestsellerOnly]);
+  }, [searchQuery, categoryFilter, sortBy, showBestsellerOnly, minPrice, maxPrice]);
 
   return (
     <div className="container mx-auto py-8 space-y-8 max-w-7xl px-4">
@@ -78,6 +89,12 @@ function ProductsContent() {
         onSortChange={setSortBy}
         showBestsellerOnly={showBestsellerOnly}
         onBestsellerToggle={setShowBestsellerOnly}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        onPriceRangeChange={(min, max) => {
+          setMinPrice(min);
+          setMaxPrice(max);
+        }}
       />
 
       {filteredAndSortedProducts.length === 0 ? (

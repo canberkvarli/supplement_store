@@ -47,6 +47,10 @@ export const useCartStore = create<CartStore>()(
           get().removeItem(productId);
           return;
         }
+        // Enforce single quantity limit per product (max 1)
+        if (quantity > 1) {
+          quantity = 1;
+        }
         set({
           items: get().items.map((i) =>
             i.product.id === productId ? { ...i, quantity } : i

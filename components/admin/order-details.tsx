@@ -6,14 +6,18 @@ import { Select } from "@/components/ui/select";
 import { Order } from "@/lib/types";
 import { useOrderStore } from "@/lib/store";
 import Image from "next/image";
-import { User, Mail, MapPin, Calendar, Package, DollarSign } from "lucide-react";
+import { User, Mail, MapPin, Calendar, Package, DollarSign, Phone, Building2 } from "lucide-react";
 
 interface OrderDetailsProps {
   order: Order;
 }
 
-export function OrderDetails({ order }: OrderDetailsProps) {
+export function OrderDetails({ order: initialOrder }: OrderDetailsProps) {
   const updateOrderStatus = useOrderStore((state) => state.updateOrderStatus);
+  const orders = useOrderStore((state) => state.orders);
+  
+  // Get the latest order from store to ensure reactivity
+  const order = orders.find((o) => o.id === initialOrder.id) || initialOrder;
 
   const handleStatusChange = (newStatus: Order["status"]) => {
     updateOrderStatus(order.id, newStatus);
@@ -60,6 +64,10 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 <Mail className="h-3 w-3" />
                 {order.email}
               </p>
+              <p className="text-sm text-muted-foreground flex items-center gap-2">
+                <Phone className="h-3 w-3" />
+                {order.phone}
+              </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2 flex items-center gap-2">
@@ -67,6 +75,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 Shipping Address
               </h3>
               <p className="text-sm">{order.address}</p>
+              <p className="text-sm text-muted-foreground">
+                {order.city}, {order.state} {order.zipCode}
+              </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2 flex items-center gap-2">

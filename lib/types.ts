@@ -17,7 +17,11 @@ export interface Order {
   id: string;
   customerName: string;
   email: string;
+  phone: string;
   address: string;
+  city: string;
+  state: string;
+  zipCode: string;
   products: CartItem[];
   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   date: string;

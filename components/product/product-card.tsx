@@ -25,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="flex flex-col overflow-hidden">
       <Link href={`/products/${product.id}`}>
-        <div className="relative aspect-square w-full overflow-hidden bg-muted">
+        <div className="relative aspect-square w-full overflow-hidden bg-muted rounded-t-lg">
           <Image
             src={product.image}
             alt={product.name}
@@ -52,7 +52,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <Badge variant="outline">{product.category}</Badge>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="pt-4 pb-4">
         <Button
           className="w-full"
           onClick={handleAddToCart}

@@ -14,6 +14,9 @@ interface FiltersProps {
   onSortChange: (value: string) => void;
   showBestsellerOnly: boolean;
   onBestsellerToggle: (value: boolean) => void;
+  minPrice: number | null;
+  maxPrice: number | null;
+  onPriceRangeChange: (min: number | null, max: number | null) => void;
 }
 
 export function Filters({
@@ -25,6 +28,9 @@ export function Filters({
   onSortChange,
   showBestsellerOnly,
   onBestsellerToggle,
+  minPrice,
+  maxPrice,
+  onPriceRangeChange,
 }: FiltersProps) {
   const categories: Product["category"][] = [
     "protein",
@@ -40,14 +46,14 @@ export function Filters({
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search products..."
+          placeholder="Search products by name or description..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full pl-10"
         />
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Select value={categoryFilter} onChange={(e) => onCategoryChange(e.target.value)}>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 items-end">
+        <Select value={categoryFilter} onChange={(e) => onCategoryChange(e.target.value)} className="self-end">
           <option value="">All Categories</option>
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -55,13 +61,41 @@ export function Filters({
             </option>
           ))}
         </Select>
-        <Select value={sortBy} onChange={(e) => onSortChange(e.target.value)}>
-          <option value="name">Sort by Name</option>
+        <Select value={sortBy} onChange={(e) => onSortChange(e.target.value)} className="self-end">
+          <option value="name">Alphabetical Order</option>
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
           <option value="bestseller">Bestsellers First</option>
         </Select>
-        <label className="flex items-center space-x-2 cursor-pointer">
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium">Price Range</label>
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
+              placeholder="Min"
+              value={minPrice ?? ""}
+              onChange={(e) => {
+                const value = e.target.value === "" ? null : Number(e.target.value);
+                onPriceRangeChange(value, maxPrice);
+              }}
+              className="w-full"
+              min="0"
+            />
+            <span className="text-muted-foreground">-</span>
+            <Input
+              type="number"
+              placeholder="Max"
+              value={maxPrice ?? ""}
+              onChange={(e) => {
+                const value = e.target.value === "" ? null : Number(e.target.value);
+                onPriceRangeChange(minPrice, value);
+              }}
+              className="w-full"
+              min="0"
+            />
+          </div>
+        </div>
+        <label className="flex items-center space-x-2 cursor-pointer pt-6">
           <input
             type="checkbox"
             checked={showBestsellerOnly}

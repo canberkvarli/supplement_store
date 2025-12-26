@@ -30,7 +30,7 @@ export function Carousel({ children, className }: CarouselProps) {
   }, [currentIndex]);
 
   return (
-    <div className={cn("relative w-full overflow-hidden", className)}>
+    <div className={cn("relative w-full overflow-hidden pb-12", className)}>
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -57,7 +57,7 @@ export function Carousel({ children, className }: CarouselProps) {
       >
         <ChevronRight className="h-4 w-4" />
       </Button>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
         {childrenArray.map((_, index) => (
           <button
             key={index}

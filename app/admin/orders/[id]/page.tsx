@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { notFound } from "next/navigation";
 import { useOrderStore } from "@/lib/store";
 import { OrderDetails } from "@/components/admin/order-details";
@@ -7,9 +8,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-export default function OrderDetailPage({ params }: { params: { id: string } }) {
+export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const orders = useOrderStore((state) => state.orders);
-  const order = orders.find((o) => o.id === params.id);
+  const order = orders.find((o) => o.id === id);
 
   if (!order) {
     notFound();
