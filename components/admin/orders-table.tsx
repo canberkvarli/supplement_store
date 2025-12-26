@@ -30,8 +30,12 @@ export function OrdersTable() {
     }
     
     if (from && to) {
-      const fromDate = new Date(from);
-      const toDate = new Date(to);
+      // Normalize dates to local timezone for proper comparison
+      const fromDateParts = from.split('-').map(Number);
+      const fromDate = new Date(fromDateParts[0], fromDateParts[1] - 1, fromDateParts[2]);
+      
+      const toDateParts = to.split('-').map(Number);
+      const toDate = new Date(toDateParts[0], toDateParts[1] - 1, toDateParts[2]);
       
       // Check if end date is earlier than start date
       if (toDate < fromDate) {
@@ -39,14 +43,40 @@ export function OrdersTable() {
         return false;
       }
       
-      // Check if dates are in the future
+      // Check if dates are in the future (allow today's date)
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      if (fromDate > today) {
+      const todayNormalized = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      
+      if (fromDate > todayNormalized) {
         setDateError("Start date cannot be in the future");
         return false;
       }
-      if (toDate > today) {
+      if (toDate > todayNormalized) {
+        setDateError("End date cannot be in the future");
+        return false;
+      }
+    } else if (from) {
+      // Validate single date
+      const fromDateParts = from.split('-').map(Number);
+      const fromDate = new Date(fromDateParts[0], fromDateParts[1] - 1, fromDateParts[2]);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayNormalized = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      
+      if (fromDate > todayNormalized) {
+        setDateError("Start date cannot be in the future");
+        return false;
+      }
+    } else if (to) {
+      // Validate single date
+      const toDateParts = to.split('-').map(Number);
+      const toDate = new Date(toDateParts[0], toDateParts[1] - 1, toDateParts[2]);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayNormalized = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      
+      if (toDate > todayNormalized) {
         setDateError("End date cannot be in the future");
         return false;
       }
@@ -83,9 +113,38 @@ export function OrdersTable() {
 
     const matchesStatus = !statusFilter || order.status === statusFilter;
 
-    const matchesDate =
-      (!dateFrom || new Date(order.date) >= new Date(dateFrom)) &&
-      (!dateTo || new Date(order.date) <= new Date(dateTo));
+    // For date filtering, we need to compare dates properly
+    // Normalize all dates to local timezone and compare only the date part (ignore time)
+    let matchesDate = true;
+    
+    if (dateFrom || dateTo) {
+      // Normalize order date to start of day in local timezone
+      const orderDate = new Date(order.date);
+      const orderDateNormalized = new Date(
+        orderDate.getFullYear(),
+        orderDate.getMonth(),
+        orderDate.getDate()
+      );
+      
+      if (dateFrom) {
+        // dateFrom from input is in format YYYY-MM-DD, create date at start of day in local timezone
+        const fromDateParts = dateFrom.split('-').map(Number);
+        const fromDate = new Date(fromDateParts[0], fromDateParts[1] - 1, fromDateParts[2]);
+        if (orderDateNormalized < fromDate) {
+          matchesDate = false;
+        }
+      }
+      
+      if (dateTo && matchesDate) {
+        // dateTo from input is in format YYYY-MM-DD, create date at start of day in local timezone
+        const toDateParts = dateTo.split('-').map(Number);
+        const toDate = new Date(toDateParts[0], toDateParts[1] - 1, toDateParts[2]);
+        // Compare with order date normalized (both are at start of day, so same day will be equal)
+        if (orderDateNormalized > toDate) {
+          matchesDate = false;
+        }
+      }
+    }
 
     return matchesSearch && matchesStatus && matchesDate;
   });

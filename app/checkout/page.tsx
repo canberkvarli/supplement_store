@@ -47,6 +47,10 @@ export default function CheckoutPage() {
     if (isSubmitting) {
       // Fallback: reset after 5 seconds if navigation hasn't completed
       const fallbackTimeout = setTimeout(() => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
         setIsSubmitting(false);
       }, 5000);
 
@@ -157,9 +161,11 @@ export default function CheckoutPage() {
         // Reset state after navigation attempt
         // If navigation succeeds, component will unmount and cleanup will run
         // If it fails, the fallback timeout in useEffect will reset it
+        timeoutRef.current = null;
       } catch (error) {
         // If navigation fails, reset the submitting state
         console.error("Navigation failed:", error);
+        timeoutRef.current = null;
         setIsSubmitting(false);
       }
     }, 1000);
