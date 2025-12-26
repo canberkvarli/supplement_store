@@ -188,7 +188,7 @@ export default function CheckoutPage() {
           </Card>
         </div>
       )}
-      <h1 className="text-4xl font-bold mb-8">Checkout</h1>
+      <h1 className="text-3xl sm:text-4xl font-bold mb-8">Checkout</h1>
 
       <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
@@ -268,7 +268,7 @@ export default function CheckoutPage() {
                   <p className="text-sm text-destructive mt-1">{errors.address}</p>
                 )}
               </div>
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="city" className="text-sm font-medium mb-2 block flex items-center gap-2">
                     <Building2 className="h-4 w-4" />
@@ -338,13 +338,13 @@ export default function CheckoutPage() {
                         className="object-cover"
                       />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold">{item.product.name}</h4>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold truncate">{item.product.name}</h4>
                       <p className="text-sm text-muted-foreground">
                         Qty: {item.quantity} × ${item.product.price.toFixed(2)}
                       </p>
                     </div>
-                    <p className="font-semibold">
+                    <p className="font-semibold flex-shrink-0">
                       ${(item.product.price * item.quantity).toFixed(2)}
                     </p>
                   </div>

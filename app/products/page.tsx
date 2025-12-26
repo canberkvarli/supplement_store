@@ -74,7 +74,7 @@ function ProductsContent() {
   return (
     <div className="container mx-auto py-8 space-y-8 max-w-7xl px-4">
       <div className="space-y-2">
-        <h1 className="text-4xl font-bold">All Products</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold">All Products</h1>
         <p className="text-muted-foreground">
           Browse our complete selection of premium supplements
         </p>

@@ -35,9 +35,9 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto py-8 max-w-7xl px-4">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-4xl font-bold">Shopping Cart</h1>
-        <Button variant="outline" onClick={clearCart}>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold">Shopping Cart</h1>
+        <Button variant="outline" onClick={clearCart} className="w-full sm:w-auto">
           Clear Cart
         </Button>
       </div>

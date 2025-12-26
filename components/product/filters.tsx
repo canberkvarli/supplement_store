@@ -52,8 +52,8 @@ export function Filters({
           className="w-full pl-10"
         />
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 items-end">
-        <Select value={categoryFilter} onChange={(e) => onCategoryChange(e.target.value)} className="self-end">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Select value={categoryFilter} onChange={(e) => onCategoryChange(e.target.value)}>
           <option value="">All Categories</option>
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -61,7 +61,7 @@ export function Filters({
             </option>
           ))}
         </Select>
-        <Select value={sortBy} onChange={(e) => onSortChange(e.target.value)} className="self-end">
+        <Select value={sortBy} onChange={(e) => onSortChange(e.target.value)}>
           <option value="name">Alphabetical Order</option>
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
@@ -95,7 +95,7 @@ export function Filters({
             />
           </div>
         </div>
-        <label className="flex items-center space-x-2 cursor-pointer pt-6">
+        <label className="flex items-center space-x-2 cursor-pointer pt-6 sm:pt-0">
           <input
             type="checkbox"
             checked={showBestsellerOnly}

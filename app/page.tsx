@@ -44,18 +44,18 @@ export default function Home() {
     <div className="container mx-auto py-8 space-y-12 max-w-7xl px-4">
       {/* Hero Section */}
       <section className="text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl px-4">
           Premium Supplements for Your Wellness Journey
         </h1>
-        <p className="mx-auto max-w-[700px] text-lg text-muted-foreground">
+        <p className="mx-auto max-w-[700px] text-base sm:text-lg text-muted-foreground px-4">
           Discover our curated selection of high-quality supplements designed to support your health and fitness goals.
         </p>
-        <div className="flex items-center justify-center gap-4">
-          <Link href="/products">
-            <Button size="lg">Shop Now</Button>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
+          <Link href="/products" className="w-full sm:w-auto">
+            <Button size="lg" className="w-full sm:w-auto">Shop Now</Button>
           </Link>
-          <Link href="/products?category=protein">
-            <Button size="lg" variant="outline">
+          <Link href="/products?category=protein" className="w-full sm:w-auto">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">
               Browse Protein
             </Button>
           </Link>
@@ -64,10 +64,10 @@ export default function Home() {
 
       {/* Bestsellers Carousel */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-bold">Bestsellers</h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <h2 className="text-2xl sm:text-3xl font-bold">Bestsellers</h2>
           <Link href="/products?bestseller=true">
-            <Button variant="ghost">
+            <Button variant="ghost" className="w-full sm:w-auto">
               View All <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -77,8 +77,8 @@ export default function Home() {
 
       {/* FAQ Section */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-bold text-center">Frequently Asked Questions</h2>
-        <div className="max-w-3xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center px-4">Frequently Asked Questions</h2>
+        <div className="max-w-3xl mx-auto px-4">
           <Accordion type="single">
             {faqs.map((faq, index) => {
               const Icon = faq.icon;
@@ -104,7 +104,7 @@ export default function Home() {
 
       {/* Contact Us Section */}
       <section id="contact" className="space-y-4">
-        <h2 className="text-3xl font-bold text-center">Contact Us</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-center px-4">Contact Us</h2>
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
             <CardTitle>Get in Touch</CardTitle>

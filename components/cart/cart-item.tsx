@@ -14,7 +14,7 @@ export function CartItem({ item }: CartItemProps) {
   const removeItem = useCartStore((state) => state.removeItem);
 
   return (
-    <div className="flex items-center gap-4 border-b py-4">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-b py-4">
       <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md bg-muted">
         <Image
           src={item.product.image}
@@ -23,11 +23,14 @@ export function CartItem({ item }: CartItemProps) {
           className="object-cover"
         />
       </div>
-      <div className="flex-1">
-        <h3 className="font-semibold">{item.product.name}</h3>
-        <p className="text-sm text-muted-foreground">${item.product.price.toFixed(2)}</p>
+      <div className="flex-1 min-w-0 w-full sm:w-auto">
+        <h3 className="font-semibold truncate">{item.product.name}</h3>
+        <p className="text-sm text-muted-foreground">${item.product.price.toFixed(2)} × {item.quantity}</p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
+        <div className="text-left sm:text-right">
+          <p className="font-semibold">${(item.product.price * item.quantity).toFixed(2)}</p>
+        </div>
         <Button
           variant="ghost"
           size="icon"
@@ -36,9 +39,6 @@ export function CartItem({ item }: CartItemProps) {
         >
           <Trash2 className="h-4 w-4" />
         </Button>
-      </div>
-      <div className="text-right">
-        <p className="font-semibold">${(item.product.price * item.quantity).toFixed(2)}</p>
       </div>
     </div>
   );

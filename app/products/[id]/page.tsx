@@ -41,12 +41,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
         <div className="space-y-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge variant="outline">{product.category}</Badge>
               {product.bestseller && <Badge>Bestseller</Badge>}
             </div>
-            <h1 className="text-4xl font-bold">{product.name}</h1>
-            <p className="text-3xl font-bold">${product.price.toFixed(2)}</p>
+            <h1 className="text-3xl sm:text-4xl font-bold">{product.name}</h1>
+            <p className="text-2xl sm:text-3xl font-bold">${product.price.toFixed(2)}</p>
           </div>
 
           <Card>
@@ -56,7 +56,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             </CardContent>
           </Card>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Button
               className="flex-1"
               size="lg"
@@ -72,8 +72,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 </>
               )}
             </Button>
-            <Link href="/products">
-              <Button variant="outline" size="lg">
+            <Link href="/products" className="flex-1 sm:flex-initial">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 <ArrowLeft className="mr-2 h-5 w-5" />
                 Continue Shopping
               </Button>
