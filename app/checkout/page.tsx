@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CartItem } from "@/components/cart/cart-item";
 import Image from "next/image";
 import Link from "next/link";
-import { User, Mail, MapPin, Package, CreditCard, ArrowLeft, ShoppingBag, Phone, Building2 } from "lucide-react";
+import { User, Mail, MapPin, Package, CreditCard, ArrowLeft, ShoppingBag, Phone, Building2, Loader2 } from "lucide-react";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -29,8 +29,9 @@ export default function CheckoutPage() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (items.length === 0) {
+  if (items.length === 0 && !isSubmitting) {
     return (
       <div className="container mx-auto py-16 max-w-7xl px-4">
         <Card className="max-w-md mx-auto text-center">
@@ -103,6 +104,9 @@ export default function CheckoutPage() {
       return;
     }
 
+    // Set loading state
+    setIsSubmitting(true);
+
     // Create order
     const order = {
       id: `ORD-${Date.now()}`,
@@ -121,14 +125,29 @@ export default function CheckoutPage() {
 
     addOrder(order);
     clearCart();
-    // Small delay to ensure order is persisted before navigation
+    // Delay to ensure order is persisted and show loading indicator for at least 1 second
     setTimeout(() => {
       router.push(`/admin/orders/${order.id}`);
-    }, 100);
+    }, 1000);
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-7xl px-4">
+    <div className="container mx-auto py-8 max-w-7xl px-4 relative">
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <Card className="max-w-md mx-auto">
+            <CardContent className="pt-6 pb-6 px-6">
+              <div className="flex flex-col items-center gap-4">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <div className="text-center">
+                  <h3 className="font-semibold text-lg mb-1">Processing your order...</h3>
+                  <p className="text-sm text-muted-foreground">Please wait while we complete your checkout</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
       <h1 className="text-4xl font-bold mb-8">Checkout</h1>
 
       <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-3">
@@ -322,9 +341,18 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               </div>
-              <Button type="submit" className="w-full" size="lg">
-                <CreditCard className="mr-2 h-5 w-5" />
-                Place Order
+              <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    Place Order
+                  </>
+                )}
               </Button>
               <Link href="/cart">
                 <Button variant="outline" className="w-full">

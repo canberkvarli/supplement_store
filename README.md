@@ -25,7 +25,7 @@ A modern e-commerce application for a supplement store built with Next.js 14, Ty
 - **UI Components**: shadcn/ui
 - **State Management**: Zustand with localStorage persistence
 - **Theme**: Light/Dark mode support (next-themes)
-- **Images**: Unsplash API for product images
+- **Images**: Unsplash images for product photos
 
 ## Project Structure
 
@@ -96,48 +96,6 @@ All data persists in localStorage using Zustand's persist middleware.
 - Light/Dark mode toggle
 - System preference detection
 - Theme persists across sessions
-
-## Unsplash API Integration
-
-Product images are sourced from the Unsplash API. The application includes full support for the Unsplash API with the following features:
-
-### Setup
-
-1. **Get an Unsplash API Key** (Optional but recommended):
-   - Register at [https://unsplash.com/developers](https://unsplash.com/developers)
-   - Create a new application
-   - Copy your Access Key
-   - Add it to `.env.local`:
-     ```
-     NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=your_access_key_here
-     ```
-
-2. **Without API Key**:
-   - The app will use Unsplash Source URLs (deprecated but still functional)
-   - Images will still work, but with limited control
-
-### API Implementation
-
-The application uses the Unsplash API according to their [official documentation](https://unsplash.com/documentation#search-photos):
-
-- **Search Photos**: `/api/unsplash?query=protein&count=5` - Search for photos by keyword
-- **Random Photo**: `/api/unsplash/random?query=supplement` - Get a random photo
-- **Image URLs**: Images are hotlinked directly from Unsplash CDN as per their guidelines
-
-### Files
-
-- `lib/unsplash.ts` - Unsplash API utility functions
-- `app/api/unsplash/route.ts` - API route for fetching images
-- `lib/fetch-products.ts` - Function to generate products with API-fetched images
-- `next.config.ts` - Configured to allow Unsplash image domains
-
-### Usage
-
-The current implementation uses Unsplash Source URLs for simplicity. To use the full API:
-
-1. Set `NEXT_PUBLIC_UNSPLASH_ACCESS_KEY` in your environment
-2. The API will automatically use authenticated requests
-3. You'll get better rate limits and more control over image selection
 
 ## License
 
