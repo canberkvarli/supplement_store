@@ -68,7 +68,7 @@ export function AccordionItem({ value, children, className }: AccordionItemProps
     <div className={cn("border rounded-lg overflow-hidden bg-card", className)}>
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
-          return React.cloneElement(child, { itemValue: value } as any);
+          return React.cloneElement(child, { itemValue: value } as { itemValue: string });
         }
         return child;
       })}

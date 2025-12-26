@@ -13,6 +13,25 @@ import { useOrderStore } from "@/lib/store";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Search, Eye, Package, AlertCircle, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 
+const SortIcon = ({ 
+  column, 
+  sortColumn, 
+  sortDirection 
+}: { 
+  column: "date" | "items" | "total";
+  sortColumn: "date" | "items" | "total" | null;
+  sortDirection: "asc" | "desc";
+}) => {
+  if (sortColumn !== column) {
+    return <ArrowUpDown className="ml-1 h-3 w-3 opacity-50" />;
+  }
+  return sortDirection === "asc" ? (
+    <ArrowUp className="ml-1 h-3 w-3" />
+  ) : (
+    <ArrowDown className="ml-1 h-3 w-3" />
+  );
+};
+
 export function OrdersTable() {
   const orders = useOrderStore((state) => state.orders);
   const [searchQuery, setSearchQuery] = useState("");
@@ -190,16 +209,6 @@ export function OrdersTable() {
     setCurrentPage(1); // Reset to first page when sorting
   };
 
-  const SortIcon = ({ column }: { column: "date" | "items" | "total" }) => {
-    if (sortColumn !== column) {
-      return <ArrowUpDown className="ml-1 h-3 w-3 opacity-50" />;
-    }
-    return sortDirection === "asc" ? (
-      <ArrowUp className="ml-1 h-3 w-3" />
-    ) : (
-      <ArrowDown className="ml-1 h-3 w-3" />
-    );
-  };
 
   const getStatusVariant = (status: Order["status"]) => {
     switch (status) {
@@ -291,7 +300,7 @@ export function OrdersTable() {
               >
                 <div className="flex items-center">
                   Date
-                  <SortIcon column="date" />
+                  <SortIcon column="date" sortColumn={sortColumn} sortDirection={sortDirection} />
                 </div>
               </TableHead>
               <TableHead 
@@ -300,7 +309,7 @@ export function OrdersTable() {
               >
                 <div className="flex items-center">
                   Items
-                  <SortIcon column="items" />
+                  <SortIcon column="items" sortColumn={sortColumn} sortDirection={sortDirection} />
                 </div>
               </TableHead>
               <TableHead>Products</TableHead>
@@ -310,7 +319,7 @@ export function OrdersTable() {
               >
                 <div className="flex items-center">
                   Total
-                  <SortIcon column="total" />
+                  <SortIcon column="total" sortColumn={sortColumn} sortDirection={sortDirection} />
                 </div>
               </TableHead>
               <TableHead>Status</TableHead>

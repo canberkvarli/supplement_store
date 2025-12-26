@@ -7,8 +7,51 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { products } from "@/lib/data";
 import { Product } from "@/lib/types";
-import Link from "next/link";
 import Image from "next/image";
+
+// Suggestions component to avoid duplication
+function SuggestionsDropdown({
+  showSuggestions,
+  suggestions,
+  onSuggestionClick,
+}: {
+  showSuggestions: boolean;
+  suggestions: Product[];
+  onSuggestionClick: (product: Product) => void;
+}) {
+  if (!showSuggestions || suggestions.length === 0) return null;
+  
+  return (
+    <div className="absolute z-50 w-full mt-2 bg-background border rounded-lg shadow-lg max-h-80 overflow-y-auto">
+      {suggestions.map((product) => (
+        <button
+          key={product.id}
+          onClick={() => onSuggestionClick(product)}
+          className="w-full px-4 py-3 text-left hover:bg-muted transition-colors border-b last:border-b-0 flex items-center gap-3"
+        >
+          <div className="relative w-12 h-12 flex-shrink-0 rounded-md overflow-hidden bg-muted">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="48px"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium">{product.name}</div>
+            <div className="text-sm text-muted-foreground line-clamp-1">
+              {product.description}
+            </div>
+            <div className="text-sm font-semibold text-primary mt-1">
+              ${product.price.toFixed(2)}
+            </div>
+          </div>
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function HeroSearch() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -82,42 +125,6 @@ export function HeroSearch() {
     setSearchQuery("");
   };
 
-  // Suggestions component to avoid duplication
-  const SuggestionsDropdown = () => {
-    if (!showSuggestions || suggestions.length === 0) return null;
-    
-    return (
-      <div className="absolute z-50 w-full mt-2 bg-background border rounded-lg shadow-lg max-h-80 overflow-y-auto">
-        {suggestions.map((product) => (
-          <button
-            key={product.id}
-            onClick={() => handleSuggestionClick(product)}
-            className="w-full px-4 py-3 text-left hover:bg-muted transition-colors border-b last:border-b-0 flex items-center gap-3"
-          >
-            <div className="relative w-12 h-12 flex-shrink-0 rounded-md overflow-hidden bg-muted">
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                className="object-cover"
-                sizes="48px"
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-medium">{product.name}</div>
-              <div className="text-sm text-muted-foreground line-clamp-1">
-                {product.description}
-              </div>
-              <div className="text-sm font-semibold text-primary mt-1">
-                ${product.price.toFixed(2)}
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <>
       {/* Original position - hidden when sticky */}
@@ -167,7 +174,13 @@ export function HeroSearch() {
           </form>
 
           {/* Only show suggestions when original search is visible (not sticky) */}
-          {!isSticky && <SuggestionsDropdown />}
+          {!isSticky && (
+            <SuggestionsDropdown
+              showSuggestions={showSuggestions}
+              suggestions={suggestions}
+              onSuggestionClick={handleSuggestionClick}
+            />
+          )}
         </div>
       </div>
 
@@ -218,7 +231,13 @@ export function HeroSearch() {
             </form>
 
             {/* Only show suggestions when sticky search is visible */}
-            {isSticky && <SuggestionsDropdown />}
+            {isSticky && (
+              <SuggestionsDropdown
+                showSuggestions={showSuggestions}
+                suggestions={suggestions}
+                onSuggestionClick={handleSuggestionClick}
+              />
+            )}
           </div>
         </div>
       </div>

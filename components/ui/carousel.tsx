@@ -14,20 +14,20 @@ export function Carousel({ children, className }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const childrenArray = React.Children.toArray(children);
 
-  const goToPrevious = () => {
+  const goToPrevious = React.useCallback(() => {
     setCurrentIndex((prev) => (prev === 0 ? childrenArray.length - 1 : prev - 1));
-  };
+  }, [childrenArray.length]);
 
-  const goToNext = () => {
+  const goToNext = React.useCallback(() => {
     setCurrentIndex((prev) => (prev === childrenArray.length - 1 ? 0 : prev + 1));
-  };
+  }, [childrenArray.length]);
 
   React.useEffect(() => {
     const timer = setInterval(() => {
       goToNext();
     }, 5000);
     return () => clearInterval(timer);
-  }, [currentIndex]);
+  }, [goToNext]);
 
   return (
     <div className={cn("relative w-full overflow-hidden pb-12", className)}>
