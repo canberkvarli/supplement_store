@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Order } from "@/lib/types";
 import { useOrderStore } from "@/lib/store";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Search, Eye, Package, AlertCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, Eye, Package, AlertCircle, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 
 export function OrdersTable() {
   const orders = useOrderStore((state) => state.orders);
@@ -21,6 +21,8 @@ export function OrdersTable() {
   const [dateTo, setDateTo] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [dateError, setDateError] = useState<string>("");
+  const [sortColumn, setSortColumn] = useState<"date" | "items" | "total" | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const itemsPerPage = 10;
 
   // Validate date range
@@ -150,11 +152,54 @@ export function OrdersTable() {
     return matchesSearch && matchesStatus && matchesDate;
   });
 
-  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
-  const paginatedOrders = filteredOrders.slice(
+  // Sort filtered orders
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
+    if (!sortColumn) return 0;
+
+    let comparison = 0;
+    switch (sortColumn) {
+      case "date":
+        comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+        break;
+      case "items":
+        comparison = a.products.length - b.products.length;
+        break;
+      case "total":
+        comparison = a.total - b.total;
+        break;
+    }
+
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+
+  const totalPages = Math.ceil(sortedOrders.length / itemsPerPage);
+  const paginatedOrders = sortedOrders.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const handleSort = (column: "date" | "items" | "total") => {
+    if (sortColumn === column) {
+      // Toggle direction if clicking the same column
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // Set new column and default to ascending
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+    setCurrentPage(1); // Reset to first page when sorting
+  };
+
+  const SortIcon = ({ column }: { column: "date" | "items" | "total" }) => {
+    if (sortColumn !== column) {
+      return <ArrowUpDown className="ml-1 h-3 w-3 opacity-50" />;
+    }
+    return sortDirection === "asc" ? (
+      <ArrowUp className="ml-1 h-3 w-3" />
+    ) : (
+      <ArrowDown className="ml-1 h-3 w-3" />
+    );
+  };
 
   const getStatusVariant = (status: Order["status"]) => {
     switch (status) {
@@ -240,10 +285,34 @@ export function OrdersTable() {
             <TableRow>
               <TableHead>Order ID</TableHead>
               <TableHead>Customer</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Items</TableHead>
+              <TableHead 
+                className="cursor-pointer hover:bg-muted/50 transition-colors select-none"
+                onClick={() => handleSort("date")}
+              >
+                <div className="flex items-center">
+                  Date
+                  <SortIcon column="date" />
+                </div>
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer hover:bg-muted/50 transition-colors select-none"
+                onClick={() => handleSort("items")}
+              >
+                <div className="flex items-center">
+                  Items
+                  <SortIcon column="items" />
+                </div>
+              </TableHead>
               <TableHead>Products</TableHead>
-              <TableHead>Total</TableHead>
+              <TableHead 
+                className="cursor-pointer hover:bg-muted/50 transition-colors select-none"
+                onClick={() => handleSort("total")}
+              >
+                <div className="flex items-center">
+                  Total
+                  <SortIcon column="total" />
+                </div>
+              </TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -367,8 +436,8 @@ export function OrdersTable() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground text-center sm:text-left">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-            {Math.min(currentPage * itemsPerPage, filteredOrders.length)} of{" "}
-            {filteredOrders.length} orders
+            {Math.min(currentPage * itemsPerPage, sortedOrders.length)} of{" "}
+            {sortedOrders.length} orders
           </p>
           <div className="flex items-center gap-2">
             <Button

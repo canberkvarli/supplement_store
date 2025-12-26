@@ -71,6 +71,11 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Hero Search */}
+        <section className="px-4 py-8">
+          <HeroSearch />
+        </section>
+
         {/* Bestsellers Carousel */}
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -86,11 +91,6 @@ export default function Home() {
 
         {/* Trust Badges Bar */}
         <TrustBadges />
-
-        {/* Hero Search */}
-        <section className="px-4 py-8">
-          <HeroSearch />
-        </section>
 
         {/* Benefits Grid */}
         <BenefitsGrid />
